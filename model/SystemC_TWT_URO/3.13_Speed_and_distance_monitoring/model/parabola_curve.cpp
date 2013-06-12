@@ -9,7 +9,7 @@
 #include <math.h>
 #include <algorithm>
 
-double parabola_curve::get_value(double x) const
+double parabola_curve::get_speed_from_position(double x) const
 {
 	auto i = arcs.lower_bound(x);
 
@@ -25,7 +25,7 @@ double parabola_curve::get_value(double x) const
 
 };
 
-double parabola_curve::get_parameter(double y) const
+double parabola_curve::get_position_from_speed(double y) const
 {
 	auto i = arcs.begin();
 
