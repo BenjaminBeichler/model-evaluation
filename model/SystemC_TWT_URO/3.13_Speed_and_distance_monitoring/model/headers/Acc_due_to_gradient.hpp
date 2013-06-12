@@ -6,6 +6,7 @@
 
 #include <systemc>
 #include "step_function.hpp"
+#include "fixed_values.hpp"
 
 const double g=9.81;
 
@@ -17,8 +18,6 @@ SC_MODULE(Acc_due_to_gradient)
 	sc_core::sc_in<uint > L_TRAIN;
 	sc_core::sc_in<bool> M_rotating_nom_valid;
 	sc_core::sc_in<double> M_rotating_nom;
-	sc_core::sc_in<double> M_rotating_min;
-	sc_core::sc_in<double> M_rotating_max;
 
 	sc_core::sc_in<double> G_TSR;
 
@@ -33,8 +32,6 @@ SC_MODULE(Acc_due_to_gradient)
 		sensitive << L_TRAIN ;
 		sensitive << M_rotating_nom_valid;
 		sensitive << M_rotating_nom ;
-		sensitive << M_rotating_min ;
-		sensitive << M_rotating_max;
 		sensitive << gradients;
 
 
