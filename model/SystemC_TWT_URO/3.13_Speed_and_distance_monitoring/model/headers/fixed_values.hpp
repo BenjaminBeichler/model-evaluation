@@ -17,6 +17,11 @@ const double V_ebi_max = 210;	//[km/h]
 const double M_rotating_max = 15;//[%]
 const double M_rotating_min = 2;//[%]
 
+const double T_warning = 2; //[s]
+const double T_driver = 4; //[s]
+const double T_preindication = 7; //[s]
+
+
 
 
 
