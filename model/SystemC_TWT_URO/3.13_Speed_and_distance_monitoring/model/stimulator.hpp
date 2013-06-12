@@ -186,8 +186,6 @@ SC_MODULE(train_data_stim)
 	sc_core::sc_out<uint> L_TRAIN;
 	sc_core::sc_out<bool> nom_value_valid;
 	sc_core::sc_out<double> M_nom_val;
-	sc_core::sc_out<double> M_nom_val_min;
-	sc_core::sc_out<double> M_nom_val_max;
 
 	SC_CTOR(train_data_stim)
 		{
@@ -200,8 +198,6 @@ SC_MODULE(train_data_stim)
 		 L_TRAIN = 20;
 		 nom_value_valid=true;
 		 M_nom_val=10;
-		 M_nom_val_min=0;
-		 M_nom_val_max=0;
 	}
 };
 

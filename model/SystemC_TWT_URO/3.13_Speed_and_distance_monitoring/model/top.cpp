@@ -34,22 +34,16 @@ int sc_main(int argc,char *argv[])
 	sc_core::sc_signal<uint> L_TRAIN;
 	sc_core::sc_signal<bool> nom_value_valid;
 	sc_core::sc_signal<double> M_nom_val;
-	sc_core::sc_signal<double> M_nom_val_min;
-	sc_core::sc_signal<double> M_nom_val_max;
 	sc_core::sc_signal<double> G_TSR;
 
 	/******* signal bindings train data *************/
 	acc_due_to_gradient_module.L_TRAIN(L_TRAIN);
 	acc_due_to_gradient_module.M_rotating_nom(M_nom_val);
-	acc_due_to_gradient_module.M_rotating_min(M_nom_val_min);
-	acc_due_to_gradient_module.M_rotating_max(M_nom_val_max);
 	acc_due_to_gradient_module.M_rotating_nom_valid(nom_value_valid);
 	acc_due_to_gradient_module.G_TSR(G_TSR);
 
 	td_stim.L_TRAIN(L_TRAIN);
 	td_stim.M_nom_val(M_nom_val);
-	td_stim.M_nom_val_max(M_nom_val_max);
-	td_stim.M_nom_val_min(M_nom_val_min);
 	td_stim.nom_value_valid(nom_value_valid);
 
 	/*******signal binding gradients ****************/
