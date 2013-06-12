@@ -45,8 +45,8 @@ struct parabola_curve
 
 
 	std::map<double,arc> arcs;
-	double get_value(double x) const;
-	double get_parameter(double y) const;
+	double get_speed_from_position(double x) const;
+	double get_position_from_speed(double y) const;
 
 	static double get_speed(double position,double begin, double slope, double v_begin);
 	static double moved_distance(double speed, double slope, double v_begin);

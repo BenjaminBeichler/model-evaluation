@@ -41,9 +41,9 @@ void Supervision_limits::braking_to_target()
 
 
 	//§3.13.9.3.2.12
-	d_EBI= EBD.read().get_parameter(V_bec) - D_bec;
+	d_EBI= EBD.read().get_position_from_speed(V_bec) - D_bec;
 	//3.13.9.3.3.2
-	d_SBI2= EBD.read().get_parameter(V_est) - V_est * T_bs2;
+	d_SBI2= EBD.read().get_position_from_speed(V_est) - V_est * T_bs2;
 
 }
 
