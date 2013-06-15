@@ -8,7 +8,7 @@
 
 std::ostream cnull(0);
 
-void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve,double print_range_begin, double print_range_end)
+void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve, std::string label)
 {
 	try{
 	std::ostringstream function;
@@ -34,14 +34,52 @@ void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve 
 	plot.set_style("lines");
 
 	plot.set_yautoscale();
-	plot.plot_equation(function.str(),"EBD");
+	plot.plot_equation(function.str(),label);
 
 	plot.set_style("points lc 7 pt 7");
 
 	plot.plot_xy(points_begin,points_speed,"Begin of Arcs");
 	}
 	catch (const GnuplotException & e) {
-		std::cout << "Error while plotting EBD with Gnuplot (" << e.what() <<")" << std::endl;
+		std::cout << "Error while plotting with Gnuplot (" << e.what() <<")" << std::endl;
 
 	}
 }
+
+void print_step_function(Gnuplot & plot , const step_function & function, std::string label)
+{
+
+	try{
+		std::ostringstream function_string;
+
+		auto i = function.step_values.begin();
+		auto j = ++function.step_values.begin();
+		for (;j != function.step_values.end();i++,j++)
+		{
+			function_string << "((x>=" << i->first << ")&&(x<" << j->first << "))? ";
+			function_string << i->second;
+			function_string << ":";
+		}
+
+		function_string << "((x>=" << i->first << ")&&(x<" << i->first + (i->first/10) << "))?";
+		function_string << i->second;
+		function_string << ": 1/0";
+
+
+
+		plot << "set term wxt";
+		plot.set_style("fsteps");
+		plot.set_xrange(0,i->first + (i->first/10));
+		plot.set_yautoscale();
+		plot.plot_equation(function_string.str(),label);
+
+
+		}
+		catch (const GnuplotException & e) {
+			std::cout << "Error while plotting with Gnuplot (" << e.what() <<")" << std::endl;
+
+		}
+
+
+}
+
