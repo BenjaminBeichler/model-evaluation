@@ -172,7 +172,9 @@ int sc_main(int argc,char *argv[])
 
 	try{
 	Gnuplot plot_EBD;
-	print_deceleration_curve_with_gnuplot(plot_EBD,EBD.read(),0,0);
+	Gnuplot plot_A_Gradient;
+	print_deceleration_curve_with_gnuplot(plot_EBD,EBD.read(),"EBD");
+	print_step_function(plot_A_Gradient,A_gradient.read(),"A_gradient");
 	std::cout << "Press ENTER to leave simulation ...";
 	std::cin.ignore();
 
