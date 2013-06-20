@@ -46,7 +46,7 @@ struct step_function_f
     void set_default(step_function y_value);
 	void modify_map(double x_value, step_function y_value);
 	void clear();
-	void canonize(step_function_f &other_step_function);
+	void align_step_intervals(step_function_f &other_step_function);
 	void compress();
 	std::map<double,step_function>::iterator get_begin_iterator();
 	std::map<double,step_function>::iterator get_end_iterator();

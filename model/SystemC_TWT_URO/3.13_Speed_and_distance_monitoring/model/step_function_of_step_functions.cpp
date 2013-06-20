@@ -57,9 +57,9 @@ void step_function_f :: modify_map(double x_value, step_function y_value)
 
 /*Extend each step_function with the other x_values of the other function by repeating
  * the y_values. After this both function have the same amount of steps.*/
-void step_function_f :: canonize(step_function_f &other_step_function)
+void step_function_f :: align_step_intervals(step_function_f &other_step_function)
 {
-	step_function::canonize(this->step_values,other_step_function.step_values);
+	step_function::align_step_intervals(this->step_values,other_step_function.step_values);
 
 }
 
@@ -85,7 +85,7 @@ void step_function_f::compress()
 
 void step_function_f::multiply_with(step_function_f &result, step_function_f first, step_function_f second)
 {
-	first.canonize(second);
+	first.align_step_intervals(second);
 	result.clear();
 	std::map<double,step_function>::iterator it1 = first.get_begin_iterator();
 	std::map<double,step_function>::iterator it2 = second.get_begin_iterator();
@@ -110,7 +110,7 @@ void step_function_f::add_step_function_as_scalar_on_second_order(step_function_
 		return;
 	}
 
-	step_function::canonize <step_function,double>(first.step_values,second.step_values);
+	step_function::align_step_intervals <step_function,double>(first.step_values,second.step_values);
 
 	auto i = second.step_values.begin();
 	auto j = first.step_values.begin();

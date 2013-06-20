@@ -50,7 +50,7 @@ struct step_function
 	static step_function& add(step_function &result, step_function first, step_function second);
 
 	template<class T1 , class T2 >
-	static void canonize(std::map<double,T1> &first , std::map<double,T2> &other);
+	static void align_step_intervals(std::map<double,T1> &first , std::map<double,T2> &other);
 
 	void multiply_scalar(double scalar);
 	void add_scalar(double scalar);
@@ -86,7 +86,7 @@ struct step_function
 
 
 template<class T1 , class T2 >
-void step_function :: canonize(std::map<double,T1> &first , std::map<double,T2> &other)
+void step_function :: align_step_intervals(std::map<double,T1> &first , std::map<double,T2> &other)
 {
 	auto it1 = first.begin();
 	auto it2 = other.begin();
