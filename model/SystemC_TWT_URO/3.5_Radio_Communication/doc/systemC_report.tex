@@ -305,7 +305,7 @@ SysML is models consist of structural and behavior elements. In our workflow we 
 \label{fig:eclipseIDE}
 \end{figure}
 
-Figure~\ref{fig:sysmlToplevel} shows the top level block diagram. This diagram also shows two packages, which are embedded in the top level package, which is called \verb SystemCModel. The two nested packages are "`TE"' for the test environment and the SUT package, which contains the actual MoRC model. The use of package allows for a better organization of the overall model and are later mapped to different SystemC namespaces (see below). This way the test environment is clearly separated from all the SUT parts. The TE is needed in order to model how the SUT can be stimulated and eventually simulate it's behavior with the SystemC runtime environment. To distinguish blocks that form the SystemC modules from other block, e.g. primitive and complex data types, we introduced the block  \verb sc_module and create links of type "`Generalization"' (c.f. Fig.~\ref{fig:sysmlToplevel}). The other blocks are "`RadioMessage"' which is a data type containing of the type of the message and type and interface definitions. The latter are used to specify, i.e. type the flow ports. 
+Figure~\ref{fig:sysmlToplevel} shows the top level block diagram. This diagram also shows two packages, which are embedded in the top level package, which is called \verb|SystemCModel|. The two nested packages are "`TE"' for the test environment and the SUT package, which contains the actual MoRC model. The use of package allows for a better organization of the overall model and are later mapped to different SystemC namespaces (see below). This way the test environment is clearly separated from all the SUT parts. The TE is needed in order to model how the SUT can be stimulated and eventually simulate it's behavior with the SystemC runtime environment. To distinguish blocks that form the SystemC modules from other block, e.g. primitive and complex data types, we introduced the block  \verb|sc_module| and create links of type "`Generalization"' (c.f. Fig.~\ref{fig:sysmlToplevel}). The other blocks are "`RadioMessage"' which is a data type containing of the type of the message and type and interface definitions. The latter are used to specify, i.e. type the flow ports. 
 
 \begin{figure}
 \begin{center}
@@ -315,7 +315,7 @@ Figure~\ref{fig:sysmlToplevel} shows the top level block diagram. This diagram a
 \label{fig:sysmlToplevel}
 \end{figure}
 
-The block \verb Simulator is the main part of the TE, which is used to connect the instances of the modules and describe the behavior of the TE. At this point we use this block to model the interconnection of the MoRC to the EURORADIO and Trackside model components shown in the internal block definition diagram in Figure~\ref{fig:simulatorIbd}. Note that this block itself is not derived from \verb sc_module, i.e. it is not a SystemC module. The connectors in the internal block definition diagram shows the connection between the ports of the modules that were defined in the top level block diagram. Arrows in the flow ports indicate the direction of the data/signal flow, which can be either in, out, and inout. The type of the port shows the kind of data that is transmitted and the kind of connection: buffer, direct, fifo etc. In this case we connect the ports \verb safe_radio_status with a signal and a simple Boolean value is transmitted. For the \verb safe_radio_order we used a FIFO connection instead, which better captures the subset 26 requirements.
+The block \verb|Simulator| is the main part of the TE, which is used to connect the instances of the modules and describe the behavior of the TE. At this point we use this block to model the interconnection of the MoRC to the EURORADIO and Trackside model components shown in the internal block definition diagram in Figure~\ref{fig:simulatorIbd}. Note that this block itself is not derived from \verb|sc_module|, i.e. it is not a SystemC module. The connectors in the internal block definition diagram shows the connection between the ports of the modules that were defined in the top level block diagram. Arrows in the flow ports indicate the direction of the data/signal flow, which can be either in, out, and inout. The type of the port shows the kind of data that is transmitted and the kind of connection: buffer, direct, fifo etc. In this case we connect the ports \verb|safe_radio_status| with a signal and a simple Boolean value is transmitted. For the \verb|safe_radio_order| we used a FIFO connection instead, which better captures the subset 26 requirements.
 
 \begin{figure}
 \begin{center}
@@ -325,7 +325,7 @@ The block \verb Simulator is the main part of the TE, which is used to connect t
 \label{fig:simulatorIbd}
 \end{figure}
 
-To realize the port types we introduce SystemC specific data types via interface and data type blocks (c.f. lower right part in Fig.~\ref{fig:sysmlToplevel}). We added a redefinable template signature to each interface to be able to model the possibility to transmit different data types with the respective interface. The blocks realizing the interfaces (dashed line with arrow in Fig.~\ref{fig:sysmlToplevel}) define a template binding assigning the template to the "`bool"' primitive. This template information is not shown in the block diagram and we had to use the model tree editor to realize these links, which is shown in Figure~\ref{fig:eclipseTemplates}. The redefinable template signature includes defines a formal classifier template parameter which is substituted withe actual primitive type \verb bool. These described characteristic SystemC model elements might later be added to a dedicated package for easy reuse in other SysML models.
+To realize the port types we introduce SystemC specific data types via interface and data type blocks (c.f. lower right part in Fig.~\ref{fig:sysmlToplevel}). We added a redefinable template signature to each interface to be able to model the possibility to transmit different data types with the respective interface. The blocks realizing the interfaces (dashed line with arrow in Fig.~\ref{fig:sysmlToplevel}) define a template binding assigning the template to the "`bool"' primitive. This template information is not shown in the block diagram and we had to use the model tree editor to realize these links, which is shown in Figure~\ref{fig:eclipseTemplates}. The redefinable template signature includes defines a formal classifier template parameter which is substituted withe actual primitive type \verb|bool|. These described characteristic SystemC model elements might later be added to a dedicated package for easy reuse in other SysML models.
 
 %According to MDA methodology we have chosen to start with a generic SysML model that captures the general structure and behavior of the SUT.
 %The model is shown in Figure.
@@ -386,9 +386,37 @@ When creating the SystemC model for the radio communication section of Subset 02
 
 For a more detailed description of the model please refer to Section~\ref{sct:radiocommdetailed}.
 
-\subsection{SystemC Model for Braking Curves (URO)}
+\subsection{SystemC Model for Subset026 Chapter 3.13 Speed and Distance Monitoring (URO)}
 
-To be filled by Uni Rostock
+The SystemC Model of the Chapter 3.13 implements the proposed of parts the Model-Benchmark, especially the calculation of the \emph{Emergency Brake Deceleration curve} (EBD). Also this model consists of a the modelled components, referred as system under test and the test environment, which generates the mandatory inputs for the calculation of the model. The separation is done on module level:
+\begin{itemize}
+	\item special datatypes
+	\begin{itemize}
+	\item \verb|step_function|: expresses the data in the SRS, which are described as continuous step function, which have a domain from 0 to positive infinity. The last step is "open-ended", which means the value of the last step is valid for any bigger argument then the start of the step. The current implementation of these functions is done by a \verb|std::map<double,double>|, which contains the start of an step an its value. Furthermore the \verb|struct| contains methods for multiplying and adding a scalar with a step function or two step functions. For this operation the two step functions need to be aligned in their steps intervals.
+	\item \verb|step_function_f|: an additional data type, which is similar to \verb|step_function|, but it stores its values in a \verb|std::map<double,step_function>|. Thereby it is used to store step function with two arguments.
+	\item \verb|parabola_curve| is needed to store a continuous curve which consists of piecewise defined parabolas. The realisation is done by a \verb|std::map| which stores for each piece of the curve the begin, speed at the begin of the curve and the constant acceleration of the piece. 
+	
+	\item \verb|track_condition|: is used to save one track condition consisting of track condition type, begin, length and end.
+	
+	\item \verb|brake_model_selector_type|: is an enumeration of all possible brake type. The underlying integer values are chosen as numbers in the form of $2^N$ to use it as a simple integer selector with bit operations (e.g. to select eddy current and magnetic shoe brake \verb!emergency_brakes[eddy_current_brake|magnetic_shoe_brake]!).
+	\end{itemize}		
+	\item Model of Calculation
+	\begin{itemize}
+	\item module \verb|acc_due_to_gradient|: calculation of acceleration due to gradient is done in this module. In this module the train length compensation is done and afterwards the acceleration is calculated as a combination from gravity acceleration, slope and rotating mass of the train.
+	\item module \verb|safe_deceleration|:combines the inputs from brake models, track conditions, correction factors and the \verb|A_gradient| acceleration to generate the \verb|A_safe| step function. Especially the track conditions are used to determine the permitted contribution of special brakes.
+	
+	\item module \verb|calc_of_brake_build_up_time|: determines the brake build up time depending on the current status of the special brakes.
+	
+	\item module \verb|Calc_ebd|: this module calculates the \emph{Emergency Brake Deceleration} Curve out of the target position and the \verb|A_safe| step function. This Curve is saved as a \verb|parabola_curve|. 
+		\item module \verb|Supervision_limits|: with the contribution of the EBD this module calculates several points: \emph{Emergency brake intervention}(EBI), \emph{Service brake intervention} (SBI2), \emph{Warning} (W), \emph{Permitted speed} (P) and \emph{Indication} (I).
+	
+	\end{itemize}		
+	\item Test Environment
+	\begin{itemize}
+		\item \verb|stimulator.hpp|: this headerfile contains all modules, which deliver inputs for SystemC modules of the model. Currently all inputs are constant, therefore the simulation ends after all outputs are stable. In further Development this file will be splitted into separate parts, which contains the constant train data and the moving train environment.
+		\item \verb|top.cpp|: this source file is used to initialize and execute the whole model. The main part of this file is the implementation of the method \verb|sc_main| which will be executed of the SystemC framework. Inside of this method all modules are instantiated and all connection between the modules are established. After the initialization phase the method \verb|sc_start| is called and thus the simulation is started.
+	\end{itemize}
+\end{itemize}
 
 \section{Model Benefits}
 \label{sec:model-highlights}
