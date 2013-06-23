@@ -186,18 +186,22 @@ SC_MODULE(train_data_stim)
 	sc_core::sc_out<uint> L_TRAIN;
 	sc_core::sc_out<bool> nom_value_valid;
 	sc_core::sc_out<double> M_nom_val;
+	sc_core::sc_out<uint> V_MAXTRAIN;
 
 	SC_CTOR(train_data_stim)
 		{
+		L_TRAIN.initialize(20);
+		nom_value_valid.initialize(true);
+		M_nom_val.initialize(10);
+		V_MAXTRAIN.initialize(230);
+
 		SC_THREAD(stim);
 
 		}
 
 	void stim()
 	{
-		 L_TRAIN = 20;
-		 nom_value_valid=true;
-		 M_nom_val=10;
+
 	}
 };
 
