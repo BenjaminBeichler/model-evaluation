@@ -173,8 +173,10 @@ int sc_main(int argc,char *argv[])
 	try{
 	Gnuplot plot_EBD;
 	Gnuplot plot_A_Gradient;
-	print_deceleration_curve_with_gnuplot(plot_EBD,EBD.read(),"EBD");
-	print_step_function(plot_A_Gradient,A_gradient.read(),"A_gradient");
+	Gnuplot plot_brake_model_pneumatic;
+	print_step_function(plot_brake_model_pneumatic,A_break_emergency_models[PNEUMATIC_BRAKE],"Pneumatic Brake Model",true);
+	print_deceleration_curve_with_gnuplot(plot_EBD,EBD.read(),"EBD",true);
+	print_step_function(plot_A_Gradient,A_gradient.read(),"A_gradient",true);
 	std::cout << "Press ENTER to leave simulation ...";
 	std::cin.ignore();
 

@@ -23,7 +23,7 @@ extern std::ostream cnull;
 #define MODULE_DEBUG_OUT cnull
 #endif
 
-void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve, std::string label);
-void print_step_function(Gnuplot & plot , const step_function & function, std::string label);
+void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve, std::string label,bool svg);
+void print_step_function(Gnuplot & plot , const step_function & function, std::string label,bool svg);
 
 #endif /* TOOLS_HPP_ */

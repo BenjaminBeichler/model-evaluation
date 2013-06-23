@@ -8,7 +8,7 @@
 
 std::ostream cnull(0);
 
-void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve, std::string label)
+void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve &curve, std::string label, bool svg)
 {
 	try{
 	std::ostringstream function;
@@ -29,13 +29,29 @@ void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve 
 	function << "1/0" ;
 
 
+	if(svg)
+	{
+	plot << "set terminal svg fname 'Verdana' fsize 10 ";
+	plot << "set object 1 rect from screen 0, 0, 0 to screen 1, 1, 0 behind";
+	plot << "set object 1 rect fc  rgb \"white\"  fillstyle solid 1.0";
+	std::string output("set output '");
+	output += label;
+	output += ".svg'";
+	plot << output;
+	}
+	else
+	{
+		plot << "set term wxt";
+	}
 
-	plot << "set term wxt";
 	plot.set_style("lines");
 
 	plot.set_yautoscale();
 	plot.plot_equation(function.str(),label);
 
+	if(svg)
+	plot.set_style("points lc -1 pt 7");
+	else
 	plot.set_style("points lc 7 pt 7");
 
 	plot.plot_xy(points_begin,points_speed,"Begin of Arcs");
@@ -46,7 +62,7 @@ void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve 
 	}
 }
 
-void print_step_function(Gnuplot & plot , const step_function & function, std::string label)
+void print_step_function(Gnuplot & plot , const step_function & function, std::string label,bool svg)
 {
 
 	try{
@@ -67,7 +83,21 @@ void print_step_function(Gnuplot & plot , const step_function & function, std::s
 
 
 
-		plot << "set term wxt";
+		if(svg)
+			{
+			plot << "set terminal svg fname 'Verdana' fsize 10 ";
+			plot << "set object 1 rect from screen 0, 0, 0 to screen 1, 1, 0 behind";
+			plot << "set object 1 rect fc  rgb \"white\"  fillstyle solid 1.0";
+			std::string output("set output '");
+			output += label;
+			output += ".svg'";
+			plot << output;
+			}
+			else
+			{
+				plot << "set term wxt";
+			}
+
 		plot.set_style("fsteps");
 		plot.set_xrange(0,i->first + (i->first/10));
 		plot.set_yautoscale();
