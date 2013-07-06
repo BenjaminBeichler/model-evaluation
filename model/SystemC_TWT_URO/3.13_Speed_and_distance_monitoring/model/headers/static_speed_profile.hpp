@@ -16,10 +16,12 @@ struct static_speed_profile_subelement
 	uint cant_deficiency_ssp_category;
 	uint other_specific_ssp_category;
 	uint max_speed;
+	int ssp_category;
 
 	inline bool operator == (const static_speed_profile_subelement & rhs) const {
 	return (this->cant_deficiency_ssp_category == rhs.cant_deficiency_ssp_category) &&
 			(this->other_specific_ssp_category == rhs.other_specific_ssp_category) &&
+			(this->ssp_category == rhs.ssp_category) &&
 			(this->max_speed == rhs.max_speed);
 
 	}
