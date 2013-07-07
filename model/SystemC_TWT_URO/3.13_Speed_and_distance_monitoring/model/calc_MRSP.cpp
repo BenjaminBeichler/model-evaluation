@@ -12,64 +12,81 @@ void calc_mrsp::eval()
 	step_function mrsp_local;
 
 	//initialize with train max speed
-	mrsp_local[0]=train_related_max_speed;
+	mrsp_local[0] = train_related_max_speed;
 
 	// all profiles are considered to be sorted by there begin
 	auto local_ssp = static_speed_profile.read();
 
 	// axle load subelements are also considered to be sorted by there category
 	auto local_asp = axle_load_speed_profile.read();
-	auto it_ssp = local_ssp.begin();
-	auto it_asp = local_asp.begin();
 
 
-	// do train length compansation (add L_TRAIN to length when indicated) and remove non applicable axle load restrictions (to low axle load category)
-	auto it_asp_tlc = local_asp.begin();
-	while (it_asp_tlc != local_asp.end()) {
-		// if the lowest category in profile is higher than train axle load category, delete restriction (see §3.11.4.4)
-		if (it_asp_tlc->subelements[0].axle_load_category
-				> train_axle_load_category) {
-			it_asp_tlc = local_asp.erase(it_asp_tlc);
-		} else {
-			if (it_asp_tlc->train_length_compansated) {
-				it_asp_tlc->length += L_TRAIN;
-			}
-			it_asp_tlc++;
-		}
-
-	}
-
-	double iterated_position = 0;
-	static_speed_profile_element current_active_ssp;
-
-
-	if(it_ssp->begin < it_asp->begin)
-	{
-		iterated_position=it_ssp->begin;
-		current_active_ssp = *it_ssp;
-		mrsp_local[it_ssp->begin] = std::min(get_restrictive_speed_from_ssp(*it_ssp),train_related_max_speed.read());
-
-	}
-	if(it_ssp->begin > it_asp->begin)
-	{
-		iterated_position=it_asp->begin;
-		mrsp_local[it_asp->begin]=std::min(get_restrictive_speed_from_asp(*it_asp),train_related_max_speed.read());
-	}
-
-
-
-	while(it_ssp != local_ssp.end() && it_asp != local_asp.end())
-	{
+	apply_axle_load_profile_to_mrsp(mrsp_local,local_asp);
 
 
 
 
-	}
+
+
 
 
 
 };
 
+
+
+step_function &calc_mrsp::apply_axle_load_profile_to_mrsp(step_function &mrsp,std::vector<axle_load_speed_profile_element> &asp)
+{
+	auto it_asp_tlc = asp.begin();
+	while (it_asp_tlc != asp.end()) {
+			// if the lowest category in profile is higher than train axle load category, delete restriction (see §3.11.4.4)
+			if (it_asp_tlc->subelements[0].axle_load_category
+					> train_axle_load_category) {
+				continue;
+			}
+
+			double lowest_speed = get_restrictive_speed_from_asp(*it_asp_tlc);
+
+			double end_axle_load_restriction = it_asp_tlc->begin
+					+ it_asp_tlc->length;
+			//
+			if (it_asp_tlc->train_length_compansated) {
+				end_axle_load_restriction += L_TRAIN;
+			}
+
+			//write old value on end of the modifications of current axle load speed restriction
+			if (mrsp.get_value(end_axle_load_restriction) > lowest_speed) {
+				mrsp[end_axle_load_restriction] = mrsp.get_value(
+						end_axle_load_restriction);
+			}
+
+			auto mrsp_it = mrsp.get_iterator_on_step(
+					end_axle_load_restriction);
+
+			//iterate over the piece of mrsp, check whether this asp-element is more restictive
+			while (mrsp_it != mrsp.get_begin_iterator()
+					&& (mrsp_it->first >= it_asp_tlc->begin)) {
+				if (mrsp_it->second > lowest_speed) {
+					mrsp[mrsp_it->first] = lowest_speed;
+				}
+				mrsp_it--;
+			}
+
+			//place the first change of asp, when it is not on the boundary of the current iterator
+			if (mrsp_it->first < it_asp_tlc->begin
+					&& mrsp.get_value(it_asp_tlc->begin) > lowest_speed) {
+				mrsp[it_asp_tlc->begin] = lowest_speed;
+			}
+
+		}
+	return mrsp;
+
+}
+
+step_function &calc_mrsp::apply_static_speed_profile_to_mrsp(step_function &mrsp,std::vector<static_speed_profile_element> &ssp)
+{
+
+}
 uint calc_mrsp::get_restrictive_speed_from_asp(axle_load_speed_profile_element asp_element)
 {
 	uint resulting_speed;

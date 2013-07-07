@@ -37,6 +37,8 @@ SC_MODULE(calc_mrsp)
 private:
 	uint get_restrictive_speed_from_ssp(static_speed_profile_element ssp_elem);
 	uint get_restrictive_speed_from_asp(axle_load_speed_profile_element asp_element);
+	step_function &apply_axle_load_profile_to_mrsp(step_function &mrsp,std::vector<axle_load_speed_profile_element> &asp);
+	step_function &apply_static_speed_profile_to_mrsp(step_function &mrsp,std::vector<static_speed_profile_element> &ssp);
 
 };
 
