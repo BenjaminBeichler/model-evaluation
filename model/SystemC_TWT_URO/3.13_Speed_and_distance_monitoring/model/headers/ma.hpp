@@ -23,7 +23,22 @@ struct ma
 	uint D_STARTOL;
 	uint T_OL;
 	uint V_RELEASEOL;
+
+	inline bool operator == (const ma & rhs) const {
+		return (level == rhs.level)&&
+		(T_LOA == rhs.T_LOA)&&
+		(V_LOA == rhs.V_LOA)&&
+		(dangerpoint_exist == rhs.dangerpoint_exist)&&
+		(D_DP == rhs.D_DP)&&
+		(v_RELEASEDP == rhs.v_RELEASEDP)&&
+		(overlap_exist == rhs.overlap_exist)&&
+		(D_STARTOL == rhs.D_STARTOL)&&
+		(T_OL == rhs.T_OL)&&
+		(V_RELEASEOL == rhs.V_RELEASEOL);
+	}
 };
+void sc_trace(sc_core::sc_trace_file *tf, const ma &v, const std::string &NAME );
+std::ostream& operator<<(std::ostream &os, const ma &obj);
 
 
 #endif /* MA_HPP_ */
