@@ -250,7 +250,6 @@ SC_MODULE(EBD_stim)
 	sc_core::sc_out<double> target_position;
 	sc_core::sc_out<double> target_speed;
 
-	sc_core::sc_out<bool> MRSP_AND_NOT_LOA_TARGET;
 
 	SC_CTOR(EBD_stim)
 	{
@@ -260,8 +259,6 @@ SC_MODULE(EBD_stim)
 
 		target_position = 1000;
 		target_speed = 0;
-		MRSP_AND_NOT_LOA_TARGET=false;
-
 
 	};
 };

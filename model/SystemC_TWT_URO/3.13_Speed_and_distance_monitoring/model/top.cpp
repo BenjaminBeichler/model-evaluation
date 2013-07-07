@@ -145,17 +145,13 @@ int sc_main(int argc,char *argv[])
 	sc_core::sc_signal<double> target_position;
 	sc_core::sc_signal<double> target_speed;
 
-	sc_core::sc_signal<bool> MRSP_AND_NOT_LOA_TARGET;
-
 
 	sc_core::sc_signal<parabola_curve> EBD;
 
 	/**** signal bindings target *****/
-	ebd_stim.MRSP_AND_NOT_LOA_TARGET(MRSP_AND_NOT_LOA_TARGET);
 	ebd_stim.target_position(target_position);
 	ebd_stim.target_speed(target_speed);
 
-	calc_ebd.MRSP_AND_NOT_LOA_TARGET(MRSP_AND_NOT_LOA_TARGET);
 	calc_ebd.target_position(target_position);
 	calc_ebd.target_speed(target_speed);
 

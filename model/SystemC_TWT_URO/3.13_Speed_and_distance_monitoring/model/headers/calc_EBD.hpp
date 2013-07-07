@@ -21,9 +21,6 @@ SC_MODULE(Calc_ebd)
 
 	sc_core::sc_in<double> d_est_front;
 
-
-	sc_core::sc_in<bool> MRSP_AND_NOT_LOA_TARGET;
-
 	sc_core::sc_out<parabola_curve> EBD;
 	sc_core::sc_out<double> EBD_foot;
 
@@ -36,7 +33,6 @@ SC_MODULE(Calc_ebd)
 		sensitive  << A_save;
 		sensitive  << target_position;
 		sensitive  << target_speed;
-		sensitive  << MRSP_AND_NOT_LOA_TARGET;
 
 	}
 

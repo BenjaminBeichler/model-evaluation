@@ -7,13 +7,27 @@
 
 #include "headers/calc_EBD.hpp"
 #include "headers/tools.hpp"
+#include "headers/fixed_values.hpp"
+#include <algorithm>
 void Calc_ebd::eval()
 {
 	parabola_curve local_EBD;
 	arc current_arc;
 
 	//TODO implement EBD_foot_calculation for MRSP or LoA
-	EBD_foot = target_position;
+
+	double d_V_ebi;
+
+	if(target_speed <= V_ebi_min)
+	{
+		d_V_ebi = dV_ebi_min;
+	}
+	else
+	{
+		const double c_ebi = (dV_ebi_max - dV_ebi_min)/(V_ebi_max - V_ebi_min);
+		d_V_ebi = std::min(dV_ebi_min + c_ebi * (target_speed - V_ebi_min) ,dV_ebi_max);
+
+	}
 
 
 
@@ -34,12 +48,22 @@ void Calc_ebd::eval()
 
 
 	double position = target_position;
-	double speed=target_speed;
+	double speed;
+
+	if(target_speed > 0){
+	speed=target_speed + d_V_ebi;
+	current_arc.value = target_speed + d_V_ebi;
+	}
+	else
+	{
+		speed=target_speed;
+		current_arc.value = target_speed;
+	}
 
 	current_arc.begin= position;
 	current_arc.end = position;
 	current_arc.slope=0;
-	current_arc.value = 0;
+
 	local_EBD.arcs[position]=current_arc;
 
 
@@ -133,7 +157,8 @@ void Calc_ebd::eval()
 	MODULE_OUT << "Calculated EBD" << std::endl;
 	EBD.write(local_EBD);
 
-
+	//TODO implement proper EBD_foot computation ! target_position is only a rough guess (same algorithm as above, but in other direction)
+	EBD_foot = target_position;
 
 
 }

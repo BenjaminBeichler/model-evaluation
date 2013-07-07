@@ -38,10 +38,20 @@ SC_MODULE(Supervision_limits)
 
 	SC_CTOR(Supervision_limits)
 	{
+		SC_METHOD(eval);
+		sensitive << EBD;
+		sensitive << V_MRSP;
+		sensitive << V_est;
+		sensitive << V_ura;
+		sensitive << V_target;
+		sensitive << T_traction_cut_off;
+		sensitive << T_bs2;
+		sensitive << T_be;
+		sensitive << A_est;
 
 	}
 
-
+	void eval();
 	void calc_ceiling_supervision_limits();
 	void braking_to_target();
 
