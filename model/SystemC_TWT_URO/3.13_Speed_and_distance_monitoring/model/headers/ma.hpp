@@ -9,7 +9,7 @@
 #define MA_HPP_
 #include <systemc>
 
-struct ma
+struct movement_authority
 {
 	uint level;
 	uint V_LOA;
@@ -24,7 +24,7 @@ struct ma
 	uint T_OL;
 	uint V_RELEASEOL;
 
-	inline bool operator == (const ma & rhs) const {
+	inline bool operator == (const movement_authority & rhs) const {
 		return (level == rhs.level)&&
 		(T_LOA == rhs.T_LOA)&&
 		(V_LOA == rhs.V_LOA)&&
@@ -37,8 +37,8 @@ struct ma
 		(V_RELEASEOL == rhs.V_RELEASEOL);
 	}
 };
-void sc_trace(sc_core::sc_trace_file *tf, const ma &v, const std::string &NAME );
-std::ostream& operator<<(std::ostream &os, const ma &obj);
+void sc_trace(sc_core::sc_trace_file *tf, const movement_authority &v, const std::string &NAME );
+std::ostream& operator<<(std::ostream &os, const movement_authority &obj);
 
 
 #endif /* MA_HPP_ */
