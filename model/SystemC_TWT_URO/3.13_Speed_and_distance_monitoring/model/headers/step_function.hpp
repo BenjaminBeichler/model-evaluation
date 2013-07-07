@@ -48,6 +48,7 @@ struct step_function
 
 	static step_function& multiply_with( step_function &result, step_function first, step_function second);
 	static step_function& add(step_function &result, step_function first, step_function second);
+	static step_function& max_of_both (step_function &result, step_function first, step_function second);
 
 	template<class T1 , class T2 >
 	static void align_step_intervals(std::map<double,T1> &first , std::map<double,T2> &other);

@@ -8,6 +8,7 @@
 #ifndef AXLE_LOAD_SPEED_PROFILE_HPP_
 #define AXLE_LOAD_SPEED_PROFILE_HPP_
 #include <vector>
+#include <systemc>
 
 
 struct axle_load_speed_profile_subelement{

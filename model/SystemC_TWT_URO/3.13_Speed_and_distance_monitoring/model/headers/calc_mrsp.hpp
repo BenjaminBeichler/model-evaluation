@@ -8,6 +8,8 @@
 #ifndef CALC_MRSP_HPP_
 #define CALC_MRSP_HPP_
 #include "static_speed_profile.hpp"
+#include "axle_load_speed_profile.hpp"
+#include "step_function.hpp"
 
 #include <systemc>
 #include <vector>

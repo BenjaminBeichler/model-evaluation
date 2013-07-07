@@ -8,6 +8,7 @@
 #ifndef STATIC_SPEED_PROFILE_HPP_
 #define STATIC_SPEED_PROFILE_HPP_
 #include <vector>
+#include <systemc>
 
 
 

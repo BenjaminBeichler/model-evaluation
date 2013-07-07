@@ -6,6 +6,7 @@
  */
 
 #include "headers/step_function.hpp"
+#include <algorithm>
 
 step_function :: step_function(std::map<double,double> &values)
 {
@@ -94,7 +95,7 @@ void step_function::compress()
 
 step_function& step_function::multiply_with(step_function &result, step_function first, step_function second)
 {
-	canonize(first.step_values,second.step_values);
+	align_step_intervals(first.step_values,second.step_values);
 	result.clear();
 	std::map<double,double>::iterator it1 = first.get_begin_iterator();
 	std::map<double,double>::iterator it2 = second.get_begin_iterator();
@@ -111,7 +112,7 @@ step_function& step_function::multiply_with(step_function &result, step_function
 
 step_function& step_function::add(step_function &result, step_function first, step_function second)
 {
-	canonize(first.step_values,second.step_values);
+	align_step_intervals(first.step_values,second.step_values);
 	result.clear();
 	std::map<double,double>::iterator it1 = first.get_begin_iterator();
 	std::map<double,double>::iterator it2 = second.get_begin_iterator();
@@ -121,11 +122,26 @@ step_function& step_function::add(step_function &result, step_function first, st
 	{
 		result.modify_map(it1->first,it1->second + it2->second);
 	}
-	first.compress();
-	second.compress();
+
 
 	return result;
 
+}
+
+step_function& step_function::max_of_both(step_function &result, step_function first, step_function second)
+{
+	result.clear();
+	align_step_intervals(first.step_values,second.step_values);
+
+	std::map<double,double>::iterator it1 = first.get_begin_iterator();
+	std::map<double,double>::iterator it2 = second.get_begin_iterator();
+
+	for(;(it1 != first.get_end_iterator())/*&&(it2 != second.get_end_iterator())*/;it1++,it2++)
+		{
+			result.modify_map(it1->first,std::max(it1->second,it2->second));
+		}
+
+	return result;
 }
 
 void step_function::multiply_scalar(double scalar)

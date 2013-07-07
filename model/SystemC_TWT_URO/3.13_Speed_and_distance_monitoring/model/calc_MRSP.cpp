@@ -14,27 +14,19 @@ void calc_mrsp::eval()
 	//initialize with train max speed
 	mrsp_local[0] = train_related_max_speed;
 
+	std::vector<axle_load_speed_profile_element> asp_local = axle_load_speed_profile.read();
+	std::vector<static_speed_profile_element> ssp_local = static_speed_profile.read();
+
 	// all profiles are considered to be sorted by there begin
-	auto local_ssp = static_speed_profile.read();
+	apply_axle_load_profile_to_mrsp(mrsp_local,asp_local);
+	apply_static_speed_profile_to_mrsp(mrsp_local,ssp_local);
 
-	// axle load subelements are also considered to be sorted by there category
-	auto local_asp = axle_load_speed_profile.read();
-
-
-	apply_axle_load_profile_to_mrsp(mrsp_local,local_asp);
-
-
-
-
-
-
-
-
+	mrsp.write(mrsp_local);
 
 };
 
 
-
+//TODO the way using at apply ssp is much more readably, convert this impl
 step_function &calc_mrsp::apply_axle_load_profile_to_mrsp(step_function &mrsp,std::vector<axle_load_speed_profile_element> &asp)
 {
 	auto it_asp_tlc = asp.begin();
@@ -85,6 +77,37 @@ step_function &calc_mrsp::apply_axle_load_profile_to_mrsp(step_function &mrsp,st
 
 step_function &calc_mrsp::apply_static_speed_profile_to_mrsp(step_function &mrsp,std::vector<static_speed_profile_element> &ssp)
 {
+
+	//convert ssp to step_function
+	step_function ssp_step_function;
+
+	//init this step_function also with train max_speed, as every time restrictive speed, could theoretically be +infinity
+	ssp_step_function[0]=train_related_max_speed;
+
+
+	for(auto i = ssp.begin();i!= ssp.end(); i++)
+	{
+		//TODO ISSUE: if ssp elements are smaller than train length, there are much more complicated cornercases, because it has to be looked all ssp-elements in train length
+		if((i-1)->train_length_compansated)
+		{
+			ssp_step_function[i->begin] = std::min(get_restrictive_speed_from_ssp(*i),
+					std::min(get_restrictive_speed_from_ssp(*(i-1)),train_related_max_speed.read()));
+
+			ssp_step_function[i->begin+L_TRAIN] = std::min(get_restrictive_speed_from_ssp(*i),train_related_max_speed.read());
+		}
+		else
+		{
+			ssp_step_function[i->begin] = std::min(get_restrictive_speed_from_ssp(*i),train_related_max_speed.read());
+		}
+
+
+	}
+
+	step_function::max_of_both(mrsp,mrsp,ssp_step_function);
+
+	return mrsp;
+
+
 
 }
 uint calc_mrsp::get_restrictive_speed_from_asp(axle_load_speed_profile_element asp_element)
