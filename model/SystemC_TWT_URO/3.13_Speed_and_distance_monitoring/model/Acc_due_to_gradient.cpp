@@ -9,7 +9,7 @@ void Acc_due_to_gradient::eval()
 {
 
 	// if there are no gradients, return A_gradient with standard Gradient
-	//TODO implement special gardient step function, which allows non continuous profiles
+	//TODO implement special gradient step function, which allows non continuous profiles
 	step_function train_length_compensated_gradients;
 	train_length_compensated_gradients[0]=G_TSR;
 	if(!gradients.read().step_values.empty()) {
