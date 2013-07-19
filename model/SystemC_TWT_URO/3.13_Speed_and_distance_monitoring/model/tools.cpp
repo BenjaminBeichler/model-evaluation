@@ -101,6 +101,8 @@ void print_step_function(Gnuplot & plot , const step_function & function, std::s
 		plot.set_style("fsteps");
 		plot.set_xrange(0,i->first + (i->first/10));
 		plot.set_yautoscale();
+		plot.set_xlabel("Position [m]");
+		plot.set_ylabel("Acceleration [m/s²]");
 		plot.plot_equation(function_string.str(),label);
 
 
