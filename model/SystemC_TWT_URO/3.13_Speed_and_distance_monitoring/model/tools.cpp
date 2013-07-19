@@ -16,6 +16,8 @@ void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve 
 	std::vector<double> points_begin;
 	std::vector<double> points_speed;
 
+	points_begin.reserve(curve.arcs.size());
+	points_speed.reserve(curve.arcs.size());
 	for (auto i : curve.arcs)
 	{
 		function << "((x>=" << i.second.begin << ")&&(x<" << i.second.end << "))? ";
@@ -47,6 +49,8 @@ void print_deceleration_curve_with_gnuplot(Gnuplot & plot ,const parabola_curve 
 	plot.set_style("lines");
 
 	plot.set_yautoscale();
+	plot.set_xlabel("Position [m]");
+	plot.set_ylabel("Permitted Speed to brake for target [m/s]");
 	plot.plot_equation(function.str(),label);
 
 	if(svg)
