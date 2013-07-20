@@ -179,7 +179,7 @@ int sc_main(int argc,char *argv[])
 	std::cin.ignore();
 
 	}
-	catch (GnuplotException e) {
+	catch (GnuplotException &e) {
 		std::cout << "Error while plotting EBD with Gnuplot (" << e.what() <<")" << std::endl;
 	}
 
