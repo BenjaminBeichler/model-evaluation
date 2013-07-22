@@ -6,22 +6,18 @@
  */
 #include "headers/supervision_limits.hpp"
 
-void Supervision_limits::eval()
-{
-
-};
 
 
 void Supervision_limits::calc_ceiling_supervision_limits()
 {
 	if(V_MRSP <= V_ebi_min)
 	{
-		d_V_ebi = dV_ebi_min;
+		d_V_ebi_ceil = dV_ebi_min;
 	}
 	else
 	{
-		const double c_ebi = (dV_ebi_max - dV_ebi_min)/(V_ebi_max - V_ebi_min);
-		d_V_ebi = std::min(dV_ebi_min + c_ebi * (V_MRSP - V_ebi_min) ,dV_ebi_max);
+
+		d_V_ebi_ceil = std::min(dV_ebi_min + c_ebi * (V_MRSP - V_ebi_min) ,dV_ebi_max);
 
 	}
 }

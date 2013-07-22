@@ -16,6 +16,9 @@
 
 SC_MODULE(Supervision_limits)
 {
+
+	const double c_ebi = (dV_ebi_max - dV_ebi_min)/(V_ebi_max - V_ebi_min);
+
 	sc_core::sc_in<parabola_curve> EBD;
 
 	sc_core::sc_in<double> V_MRSP;
@@ -32,7 +35,9 @@ SC_MODULE(Supervision_limits)
 
 
 
-	sc_core::sc_out<double> d_V_ebi;
+	sc_core::sc_out<double> d_V_ebi_ceil;
+	sc_core::sc_out<double> d_V_ebi_targ;
+
 	sc_core::sc_out<double> d_EBI;
 	sc_core::sc_out<double> d_SBI2;
 	sc_core::sc_out<double> d_FLOI;
@@ -40,9 +45,9 @@ SC_MODULE(Supervision_limits)
 
 	SC_CTOR(Supervision_limits)
 	{
-		SC_METHOD(eval);
+		SC_METHOD(braking_to_target);
+
 		sensitive << EBD;
-		sensitive << V_MRSP;
 		sensitive << V_est;
 		sensitive << V_ura;
 		sensitive << V_target;
@@ -51,9 +56,14 @@ SC_MODULE(Supervision_limits)
 		sensitive << T_be;
 		sensitive << A_est;
 
+		SC_METHOD(calc_ceiling_supervision_limits);
+		sensitive << EBD;
+		sensitive << V_MRSP;
+
+
 	}
 
-	void eval();
+
 	void calc_ceiling_supervision_limits();
 	void braking_to_target();
 
