@@ -8,6 +8,23 @@
 #ifndef DETERM_SUPERVISED_TARGETS_HPP_
 #define DETERM_SUPERVISED_TARGETS_HPP_
 #include <systemc>
+#include "step_function.hpp"
+#include "ma.hpp"
+#include <vector>
+
+struct supervised_target
+{
+	double begin;
+	double permitted_speed;
+	bool is_MRSP_target;
+	supervised_target(double _begin,double _permitted_speed,bool _is_MRSP_target)
+	{
+		begin = _begin;
+		permitted_speed = _permitted_speed;
+		is_MRSP_target = _is_MRSP_target;
+
+	}
+};
 
 SC_MODULE(determ_supervised_targets)
 {
@@ -20,6 +37,8 @@ SC_MODULE(determ_supervised_targets)
 
 	sc_core::sc_out<double> target_position;
 	sc_core::sc_out<double> target_speed;
+
+	std::vector<supervised_target> targets;
 
 
 

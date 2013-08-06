@@ -42,7 +42,7 @@ struct step_function
 	std::map<double,double>::iterator get_end_iterator();
 	std::map<double,double>::iterator get_iterator_on_step(double x);
 
-	bool get_iterator_on_step_return_whether_last(double x, std::map<double,double>::iterator &it);
+	const bool get_iterator_on_step_return_whether_last(double x, std::map<double,double>::iterator &it);
 
 
 
