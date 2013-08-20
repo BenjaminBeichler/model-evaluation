@@ -22,7 +22,12 @@ void determ_supervised_targets::eval()
 		if(last_mrsp_speed_restriction > it->second) targets.emplace_back(it->first,it->second,true);
 	};
 
-	if(ma.read().
+	if(ma.read().V_LOA == 0 )
+	{
+		targets.emplace_back(ma.read().D_DP, ma.read().V_LOA );
+
+	}
+
 
 };
 
